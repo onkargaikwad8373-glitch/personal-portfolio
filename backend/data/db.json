@@ -1,0 +1,850 @@
+{
+  "projects": [
+    {
+      "_id": "proj-1",
+      "title": "AI Food Safety Intelligence Platform",
+      "description": "An AI-based platform that analyzes packaged food ingredients and provides personalized health-risk and allergen insights for users using modern OCR & LLM orchestration.",
+      "techStack": [
+        "Next.js",
+        "React.js",
+        "JavaScript",
+        "Tailwind CSS",
+        "Gemini API",
+        "OpenCV",
+        "EasyOCR"
+      ],
+      "features": [
+        "Implemented OCR-based ingredient extraction using OpenCV and EasyOCR for scanning real-world food labels",
+        "Orchestrated Gemini API to perform food safety validation and generate personalized risk assessments",
+        "Designed and published responsive Next.js views with interactive dashboards and item history logs"
+      ],
+      "githubLink": "https://github.com/onkargaikwad/ai-food-safety-intelligence",
+      "liveDemoLink": "https://ai-food-safety.demo",
+      "projectImage": "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&auto=format&fit=crop&q=60",
+      "featured": false
+    },
+    {
+      "title": "ReserveKit – Restaurant Queue & Table Management System",
+      "description": "ReserveKit is a full-stack restaurant queue and table management system designed to simplify customer registration, waiting queue handling, and table allocation. The platform provides restaurant staff with a centralized dashboard to efficiently manage customers, assign tables, and monitor queue status in real time, improving operational efficiency and customer experience.",
+      "techStack": [
+        "React.js",
+        "Tailwind CSS",
+        "Node.js",
+        "Express.js",
+        "MongoDB",
+        "JWT Authentication",
+        "REST API"
+      ],
+      "features": [
+        "Customer registration",
+        "Queue management",
+        "Table assignment system",
+        "Staff dashboard",
+        "Responsive design",
+        "REST API integration"
+      ],
+      "githubLink": "https://github.com/onkargaikwad8373-glitch/QReserve.git",
+      "liveDemoLink": "http://q-reserve-frontend.vercel.app",
+      "projectImage": "https://iad.microlink.io/qmwmq_TH8vIYoK5kUBszc0X7n6I20y4yztaN6lF4ajsUYSJ34zQ8CjXsYR4-pg0axjDI1eTEKJ7gyIrrNQI0Mg.png",
+      "featured": false,
+      "_id": "pro-extwx7a33"
+    },
+    {
+      "title": "Task Manager - Personal Productivity & Task Management Platform",
+      "description": "A modern full-stack task management application built to help users organize daily work efficiently. It supports authentication, task creation, editing, completion tracking, and secure cloud storage, while delivering a clean and responsive user experience across devices.",
+      "techStack": [
+        "React.js",
+        "Tailwind CSS",
+        "Node.js",
+        "Express.js",
+        "PostgreSQL",
+        "JWT",
+        "PWA"
+      ],
+      "features": [
+        "User Authentication",
+        "Create/Edit/Delete Tasks",
+        "Mark as Completed",
+        "Priority Levels",
+        "Due Dates",
+        "Progressive Web App (PWA)"
+      ],
+      "githubLink": "https://github.com/onkargaikwad8373-glitch/Task-Manager.git",
+      "liveDemoLink": "http://task-manager-one-azure-57.vercel.app",
+      "projectImage": "https://iad.microlink.io/v3DwAIDhBcseT5m5j-uYArxbAsHTBBUa6b4lKbT24z8b-PWFpkaEFPPUNrKPGE_K-KuGyLFZlOFd7Qep7vylTg.png",
+      "featured": true,
+      "_id": "pro-23hh8thi8"
+    },
+    {
+      "title": "Netflix Clone - Netflix Landing Page Clone",
+      "description": "A fully responsive recreation of Netflix's landing page built using HTML and CSS. The project focuses on responsive layouts, clean UI design, and pixel-perfect implementation to strengthen frontend development fundamentals.",
+      "techStack": [
+        "HTML5",
+        "CSS3"
+      ],
+      "features": [
+        "Responsive Design",
+        "Hero Section",
+        "FAQ Section",
+        "Mobile Friendly",
+        "Modern Layout",
+        "CSS Animations"
+      ],
+      "githubLink": "https://github.com/onkargaikwad8373-glitch/Netflix-Clone.git",
+      "liveDemoLink": "http://netflix-clone-eta-seven.vercel.app",
+      "projectImage": "https://iad.microlink.io/FmCVher5HbxH3GZyZDsNLfE-kaTeWQNDW_-aZVJDb3z8EiYo6vxQs6GqIaqqVYgX6eyt9SODiFD1sq54efbshQ.png",
+      "featured": false,
+      "_id": "pro-i58wbgyoh"
+    }
+  ],
+  "skills": [
+    {
+      "_id": "s1",
+      "name": "Full Stack Development (React, PHP, Node.js)",
+      "category": "Web Development",
+      "proficiency": 95
+    },
+    {
+      "_id": "s2",
+      "name": "HTML, CSS, Bootstrap, JS, Tailwind",
+      "category": "Web Development",
+      "proficiency": 95
+    },
+    {
+      "_id": "s3",
+      "name": "Java (Data Structures & Algorithms)",
+      "category": "Programming Languages",
+      "proficiency": 85
+    },
+    {
+      "_id": "s4",
+      "name": "C, C++ Programming Language",
+      "category": "Programming Languages",
+      "proficiency": 80
+    },
+    {
+      "_id": "s5",
+      "name": "MYSQL Database Management",
+      "category": "Databases",
+      "proficiency": 90
+    },
+    {
+      "_id": "s6",
+      "name": "Computer Networks (CNS)",
+      "category": "Computer Science Core",
+      "proficiency": 85
+    },
+    {
+      "_id": "s7",
+      "name": "Object-Oriented Programming (OOP)",
+      "category": "Computer Science Core",
+      "proficiency": 90
+    },
+    {
+      "_id": "s8",
+      "name": "Leadership",
+      "category": "Soft Skills",
+      "proficiency": 90
+    },
+    {
+      "_id": "s9",
+      "name": "Communication",
+      "category": "Soft Skills",
+      "proficiency": 95
+    },
+    {
+      "_id": "s10",
+      "name": "Teamwork",
+      "category": "Soft Skills",
+      "proficiency": 90
+    },
+    {
+      "_id": "s11",
+      "name": "Time Management",
+      "category": "Soft Skills",
+      "proficiency": 85
+    }
+  ],
+  "education": [
+    {
+      "_id": "e1",
+      "degree": "BE - Computer Engineering",
+      "collegeName": "Sinhgad College of Engineering",
+      "university": "Savitribai Phule Pune University",
+      "duration": "2022 - 2026",
+      "cgpaOrPercentage": "9.12 CGPA / First Class with Distinction"
+    },
+    {
+      "_id": "e2",
+      "degree": "12th Class (Science & Mathematics)",
+      "collegeName": "Trimurti College of Science, Arts & Commerce, Shrirampur",
+      "university": "MHBSHSC Board",
+      "duration": "2022",
+      "cgpaOrPercentage": "Passed"
+    }
+  ],
+  "experience": [
+    {
+      "_id": "exp1",
+      "position": "Web Developer Intern",
+      "company": "RightShift Infotech",
+      "duration": "15 Jan, 2025 - 15 Feb, 25",
+      "description": "Developed dynamic web layouts inside component-based architecture schemas to build responsive applications.",
+      "achievements": [
+        "Developed a fully responsive online fruit store using React, HTML, and CSS",
+        "Applied component-based architecture to build scalable and maintainable code",
+        "Practiced debugging, adhered to industry-level coding standards, and wrote clean, maintainable code",
+        "Improved communication skills through collaboration with team leads and developers"
+      ],
+      "type": "Internship"
+    }
+  ],
+  "certifications": [
+    {
+      "_id": "c1",
+      "name": "State-Level Rhythmic Yoga Competition — 2nd Rank",
+      "issuingOrganization": "State Yoga Federation Association",
+      "date": "2023",
+      "credentialLink": "https://college-fest-awards.demo"
+    }
+  ],
+  "messages": [
+    {
+      "name": "Aakash Gaikwad",
+      "email": "gaikwadonkar8373@gmail.com",
+      "subject": "Project Assignment",
+      "message": "I want to create a website for my new buisness so i just want to do one meeting with you",
+      "read": false,
+      "_id": "mes-rfq96x0sa"
+    }
+  ],
+  "visitors": [
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-20T19:50:16.095Z",
+      "_id": "vis-sk3o3ipge"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-20T19:50:16.563Z",
+      "_id": "vis-b0omoiwru"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-23T11:03:36.218Z",
+      "_id": "vis-drlqzmswg"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-23T11:03:37.007Z",
+      "_id": "vis-4koa5ynzd"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:37:44.731Z",
+      "_id": "vis-ro6i5ee60"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:37:45.410Z",
+      "_id": "vis-xp0egpueg"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:42:12.171Z",
+      "_id": "vis-fmgf0empk"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:42:13.550Z",
+      "_id": "vis-wz92itfo6"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:47:05.506Z",
+      "_id": "vis-3qeyeigq5"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:47:07.648Z",
+      "_id": "vis-ok8y7dzw0"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:53:30.345Z",
+      "_id": "vis-wksy6plbi"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:53:31.191Z",
+      "_id": "vis-nqpe4g1v5"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:55:54.718Z",
+      "_id": "vis-b23lik079"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:55:58.648Z",
+      "_id": "vis-2976omwd1"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:56:10.319Z",
+      "_id": "vis-hryyaeu88"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:56:11.410Z",
+      "_id": "vis-grpbo4gv0"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:56:23.799Z",
+      "_id": "vis-ayr9a4usl"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:56:25.062Z",
+      "_id": "vis-qaxh1zzws"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:56:45.802Z",
+      "_id": "vis-5uhqgh0z4"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:56:46.361Z",
+      "_id": "vis-e4svx8gk1"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:57:02.098Z",
+      "_id": "vis-mza58wymz"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:57:02.509Z",
+      "_id": "vis-9bomzf1sf"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:57:13.634Z",
+      "_id": "vis-36cfxoqzu"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:57:14.283Z",
+      "_id": "vis-hyi4uhg99"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:57:25.132Z",
+      "_id": "vis-s4voojdhl"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T17:57:25.497Z",
+      "_id": "vis-o022fu7rh"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:00:48.702Z",
+      "_id": "vis-nrj9x2arx"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:00:51.640Z",
+      "_id": "vis-94mzmrqe5"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:12:44.057Z",
+      "_id": "vis-r2gb7tnxg"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:12:46.792Z",
+      "_id": "vis-fwokw8fl9"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:14:17.664Z",
+      "_id": "vis-62rhw6f2l"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:14:17.888Z",
+      "_id": "vis-vpjm6aphn"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:20:15.879Z",
+      "_id": "vis-a1wwh8bda"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:20:15.885Z",
+      "_id": "vis-u5sd93ao8"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:30:08.462Z",
+      "_id": "vis-vhtbzoaxa"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:30:08.637Z",
+      "_id": "vis-kfomhmkz1"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:30:37.054Z",
+      "_id": "vis-c4wu2dvz8"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:30:37.136Z",
+      "_id": "vis-6p5qhooso"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:48:06.609Z",
+      "_id": "vis-0lh4hmxpc"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:48:06.741Z",
+      "_id": "vis-5yde5kzb2"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:48:18.057Z",
+      "_id": "vis-re20bwivb"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:48:18.166Z",
+      "_id": "vis-q29mct325"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:50:03.493Z",
+      "_id": "vis-f9pscqprk"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:50:03.785Z",
+      "_id": "vis-w4tlljhn6"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:54:46.763Z",
+      "_id": "vis-75dy6cqtw"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:54:46.874Z",
+      "_id": "vis-veqfu0htc"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:56:40.864Z",
+      "_id": "vis-j86jgl25k"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:56:40.952Z",
+      "_id": "vis-wm00lv42i"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:57:36.783Z",
+      "_id": "vis-iu4ntoj55"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:57:37.179Z",
+      "_id": "vis-w7qgbmbq7"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:58:39.745Z",
+      "_id": "vis-15gvwcc49"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:58:40.043Z",
+      "_id": "vis-ukj043bj9"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:59:44.249Z",
+      "_id": "vis-lg7z1acko"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T18:59:44.378Z",
+      "_id": "vis-hbjw3z1r5"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T19:25:28.846Z",
+      "_id": "vis-vcvorifd6"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-06-30T19:25:29.114Z",
+      "_id": "vis-ks0j1be6w"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T07:43:20.560Z",
+      "_id": "vis-52ubqs8tn"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T07:43:20.707Z",
+      "_id": "vis-ktnyhv4jj"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T07:50:44.039Z",
+      "_id": "vis-y1uo44467"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T07:50:44.226Z",
+      "_id": "vis-785yk387k"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T07:56:48.584Z",
+      "_id": "vis-bxg3xcp7a"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T07:56:48.779Z",
+      "_id": "vis-1v340zwvm"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T07:56:49.419Z",
+      "_id": "vis-2qstvlomu"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T07:56:49.425Z",
+      "_id": "vis-di3jfxtnv"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T09:33:00.852Z",
+      "_id": "vis-1nlmqrttg"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T09:33:00.861Z",
+      "_id": "vis-s950vkb8t"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T18:38:40.639Z",
+      "_id": "vis-p2ebz040a"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T18:38:41.191Z",
+      "_id": "vis-o8q1nt0ks"
+    },
+    {
+      "device": "Tablet",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T19:20:25.141Z",
+      "_id": "vis-evotixxw7"
+    },
+    {
+      "device": "Tablet",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-02T19:20:25.147Z",
+      "_id": "vis-onvwxkdpu"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T13:17:29.748Z",
+      "_id": "vis-9u67qn1fo"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T13:17:29.756Z",
+      "_id": "vis-w1mhxdzkt"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T13:39:08.715Z",
+      "_id": "vis-xa22jhigf"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T13:39:08.726Z",
+      "_id": "vis-u1s544oeh"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T13:39:38.284Z",
+      "_id": "vis-p6kfv3gqi"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T13:39:38.291Z",
+      "_id": "vis-5pm30flie"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T13:40:06.957Z",
+      "_id": "vis-8n8xaga7p"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T13:40:07.008Z",
+      "_id": "vis-ib25hgjm4"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T13:51:27.243Z",
+      "_id": "vis-trkgaymu6"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T13:51:27.267Z",
+      "_id": "vis-b720zcadb"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T17:33:48.272Z",
+      "_id": "vis-pri0scp6v"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T17:33:48.277Z",
+      "_id": "vis-rf37i2aa9"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T17:34:35.441Z",
+      "_id": "vis-35rqs2ic2"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T17:34:35.627Z",
+      "_id": "vis-55ssz66bo"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T18:12:50.034Z",
+      "_id": "vis-0ztpwjzyd"
+    },
+    {
+      "device": "Desktop",
+      "browser": "Chrome",
+      "country": "India",
+      "visitTime": "2026-07-04T18:12:50.039Z",
+      "_id": "vis-cu9l698ig"
+    }
+  ],
+  "resumeUploaded": true,
+  "profile": {
+    "name": "Onkar Gaikwad",
+    "title": "Full Stack Developer & Computer Engineering Graduate",
+    "location": "Pune, Maharashtra, India",
+    "bio": "I'm a Computer Engineering graduate from Pune who loves building web apps with React and Node.js.",
+    "avatarUrl": "/uploads/avatar.JPG",
+    "github": "https://github.com/onkargaikwad8373-glitch",
+    "linkedin": "https://www.linkedin.com/in/onkar-gaikwad-60b47a254?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    "email": "onkargaikwad8373@gmail.com",
+    "instagram": "https://instagram.com/onkargaikwad",
+    "phone": "+91 9356917730",
+    "aboutHeading": "A Bit About Who I Am",
+    "aboutText1": "I'm a Computer Engineering graduate who approaches development with curiosity and attention to detail. I don't just put things together — I think about how the database queries run, how state flows through the app, and how to make the UI feel smooth and intuitive.",
+    "aboutText2": "My hands-on experience spans React frontends, Express.js backends, and both SQL and NoSQL databases. I've built projects ranging from AI-powered food safety platforms to full-featured web forums. Right now, I'm diving deeper into TypeScript, Docker, and prompt engineering.",
+    "metricCgpa": "9.12",
+    "metricProjects": "5+",
+    "metricYear": "2026",
+    "aboutCard1Title": "What I'm Looking For",
+    "aboutCard1Desc": "I want to work on real products that people actually use — whether it's building performant web apps, designing clean APIs, or experimenting with AI-powered features. I'm looking for a team where I can grow fast and ship meaningful work.",
+    "aboutCard2Title": "How I Got Here",
+    "aboutCard2Desc": "Started with C and Java in college, then fell in love with web development. Over my CS degree, I went deep into React, Node.js, and database design. Now I spend my time building full-stack projects and learning how to integrate AI into web apps.",
+    "aboutCard3Title": "What Excites Me",
+    "aboutCard3Desc": "Clean component architecture, smooth UI interactions, API design that just makes sense, and figuring out how to make AI actually useful in everyday apps. I'm also a big believer in writing code that's easy for the next person to read."
+  }
+}

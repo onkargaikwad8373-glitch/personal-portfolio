@@ -1,0 +1,254 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300..900;1,300..900&family=Space+Grotesk:wght@300..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-brand-indigo: #4f46e5;
+  --color-brand-cyan: #06b6d4;
+  --color-brand-purple: #9333ea;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+  }
+}
+
+/* ==========================================
+   THEME SYSTEM — CSS Custom Properties
+   ========================================== */
+
+:root {
+  /* Dark theme (default) */
+  --bg-primary: #0b0f19;
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --bg-card-hover: rgba(15, 23, 42, 0.75);
+  --bg-modal: rgba(15, 23, 42, 0.85);
+  --bg-navbar: rgba(11, 15, 25, 0.7);
+  --bg-input: rgba(2, 6, 23, 0.4);
+  --bg-badge: rgba(99, 102, 241, 0.08);
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-card-hover: rgba(99, 102, 241, 0.25);
+  --border-badge: rgba(99, 102, 241, 0.2);
+
+  --text-heading: #f1f5f9;
+  --text-body: #94a3b8;
+  --text-muted: #64748b;
+  --text-icon: #94a3b8;
+
+  --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+
+  --scrollbar-track: #0b0f19;
+  --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.2);
+}
+
+.light-theme {
+  --bg-primary: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --bg-card-hover: rgba(255, 255, 255, 0.9);
+  --bg-modal: rgba(255, 255, 255, 0.92);
+  --bg-navbar: rgba(248, 250, 252, 0.8);
+  --bg-input: rgba(241, 245, 249, 0.6);
+  --bg-badge: rgba(99, 102, 241, 0.06);
+
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-card-hover: rgba(99, 102, 241, 0.3);
+  --border-badge: rgba(99, 102, 241, 0.15);
+
+  --text-heading: #0f172a;
+  --text-body: #475569;
+  --text-muted: #94a3b8;
+  --text-icon: #64748b;
+
+  --shadow-card: 0 4px 16px 0 rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 8px 24px 0 rgba(0, 0, 0, 0.1);
+
+  --scrollbar-track: #f1f5f9;
+  --scrollbar-thumb: rgba(0, 0, 0, 0.12);
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================
+   THEME-AWARE UTILITY CLASSES
+   ========================================== */
+
+/* Background classes */
+.bg-theme-primary { background-color: var(--bg-primary); }
+
+/* Text classes */
+.heading-text { color: var(--text-heading); }
+.body-text { color: var(--text-body); }
+.muted-text { color: var(--text-muted); }
+.icon-muted { color: var(--text-icon); }
+
+/* Section labels */
+.section-label { color: #06b6d4; }
+.light-theme .section-label { color: #0891b2; }
+
+/* ==========================================
+   COMPONENT STYLES
+   ========================================== */
+
+/* Mesh background — only for dark theme */
+.mesh-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.18) 0px, transparent 55%),
+                    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.18) 0px, transparent 55%),
+                    radial-gradient(at 50% 100%, rgba(34, 211, 238, 0.12) 0px, transparent 55%);
+  background-color: var(--bg-primary);
+  pointer-events: none;
+}
+
+.light-theme .mesh-bg {
+  background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.06) 0px, transparent 55%),
+                    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.06) 0px, transparent 55%),
+                    radial-gradient(at 50% 100%, rgba(34, 211, 238, 0.04) 0px, transparent 55%);
+}
+
+/* Glass card system */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-hover:hover {
+  border-color: var(--border-card-hover);
+  background: var(--bg-card-hover);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.glass-modal {
+  background: var(--bg-modal);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 24px 64px 0 rgba(0, 0, 0, 0.6);
+}
+
+.light-theme .glass-modal {
+  box-shadow: 0 24px 64px 0 rgba(0, 0, 0, 0.12);
+}
+
+.glass-navbar {
+  background: var(--bg-navbar);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Skill badges */
+.skill-badge {
+  background: var(--bg-badge);
+  border: 1px solid var(--border-badge);
+  font-family: var(--font-mono);
+  transition: all 0.2s ease;
+}
+
+.skill-badge:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(34, 211, 238, 0.4);
+  transform: scale(1.03);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #22d3ee, #6366f1, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Typing animation keyframes */
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.cursor-blink {
+  animation: blink 0.7s infinite;
+}
+
+/* Light theme overrides for Tailwind dark colors */
+.light-theme .bg-\[\\#0b0f19\] { background-color: var(--bg-primary) !important; }
+.light-theme .text-slate-100 { color: var(--text-heading) !important; }
+.light-theme .text-white { color: var(--text-heading) !important; }
+.light-theme .text-slate-200 { color: var(--text-heading) !important; }
+.light-theme .text-slate-300 { color: var(--text-body) !important; }
+.light-theme .text-slate-450 { color: var(--text-body) !important; }
+.light-theme .text-slate-400 { color: var(--text-body) !important; }
+.light-theme .text-slate-500 { color: var(--text-muted) !important; }
+
+/* Custom lighter/darker color replacements for contrast */
+.light-theme .text-indigo-400 { color: #4338ca !important; }
+.light-theme .text-indigo-300 { color: #4f46e5 !important; }
+.light-theme .text-cyan-400 { color: #0891b2 !important; }
+.light-theme .text-cyan-300 { color: #0e7490 !important; }
+.light-theme .text-purple-400 { color: #7e22ce !important; }
+.light-theme .text-emerald-400 { color: #15803d !important; }
+.light-theme .text-rose-400 { color: #be123c !important; }
+.light-theme .text-amber-400 { color: #b45309 !important; }
+
+/* Text with opacity replacements */
+.light-theme .text-white\/60 { color: rgba(15, 23, 42, 0.6) !important; }
+.light-theme .text-white\/70 { color: rgba(15, 23, 42, 0.7) !important; }
+.light-theme .text-white\/80 { color: rgba(15, 23, 42, 0.8) !important; }
+.light-theme .text-white\/90 { color: rgba(15, 23, 42, 0.9) !important; }
+.light-theme .text-slate-300\/80 { color: rgba(71, 85, 105, 0.8) !important; }
+.light-theme .text-slate-400\/80 { color: rgba(71, 85, 105, 0.8) !important; }
+
+/* Backgrounds replacements for tags/badges */
+.light-theme .bg-slate-950 { background-color: rgba(15, 23, 42, 0.05) !important; }
+.light-theme .bg-slate-900 { background-color: rgba(15, 23, 42, 0.03) !important; }
+.light-theme .bg-slate-800 { background-color: rgba(15, 23, 42, 0.04) !important; }
+.light-theme .bg-indigo-950\/40 { background-color: rgba(99, 102, 241, 0.1) !important; }
+.light-theme .bg-cyan-950\/40 { background-color: rgba(6, 182, 212, 0.1) !important; }
+.light-theme .bg-purple-950\/40 { background-color: rgba(168, 85, 247, 0.1) !important; }
+
+/* Group Hover text color replacements for light theme contrast */
+.light-theme .group:hover .group-hover\:text-cyan-300 { color: #0891b2 !important; }
+.light-theme .group:hover .group-hover\:text-indigo-400 { color: #4338ca !important; }
+.light-theme .hover\:text-cyan-400:hover { color: #0891b2 !important; }
+.light-theme .hover\:text-white:hover { color: #0f172a !important; }
+
+/* Borders overrides */
+.light-theme .border-slate-700 { border-color: rgba(0, 0, 0, 0.08) !important; }
+.light-theme .border-slate-800 { border-color: rgba(0, 0, 0, 0.05) !important; }
+.light-theme .border-white\/8 { border-color: rgba(0, 0, 0, 0.06) !important; }
+.light-theme .border-white\/5 { border-color: rgba(0, 0, 0, 0.05) !important; }
+.light-theme .border-indigo-500\/20 { border-color: rgba(99, 102, 241, 0.3) !important; }
+.light-theme .border-cyan-500\/20 { border-color: rgba(6, 182, 212, 0.3) !important; }
+.light-theme .border-purple-200\/20 { border-color: rgba(168, 85, 247, 0.3) !important; }
+.light-theme .border-cyan-800\/20 { border-color: rgba(8, 145, 178, 0.2) !important; }
+
