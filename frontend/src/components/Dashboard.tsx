@@ -31,7 +31,7 @@ export default function Dashboard({
   profile
 }: DashboardProps) {
   const [token, setToken] = useState<string | null>(localStorage.getItem('admin_token'));
-  const [loginForm, setLoginForm] = useState({ email: 'admin@portfolio.com', password: 'admin123' });
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [loginError, setLoginError] = useState('');
   const [loadingLogin, setLoadingLogin] = useState(false);
 
@@ -787,15 +787,7 @@ export default function Dashboard({
                 </p>
               </div>
 
-              {/* DEMO ACCREDITATION BANNER */}
-              <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-850 space-y-1.5 text-xs text-slate-300">
-                <p className="font-bold flex items-center gap-1.5 text-cyan-400">
-                  <Terminal className="w-4 h-4 shrink-0" />
-                  Live Review Credentials:
-                </p>
-                <p className="font-mono text-slate-400">Email: <span className="text-slate-200 font-bold">admin@portfolio.com</span></p>
-                <p className="font-mono text-slate-400">Password: <span className="text-white font-bold bg-slate-800 px-1 rounded">admin123</span></p>
-              </div>
+
 
               <form onSubmit={handleLoginSubmit} className="space-y-4 relative">
                 <div className="space-y-1">
