@@ -36,6 +36,14 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// Prevent proxy and browser caching for all dynamic API endpoints
+app.use('/api', (req: Request, res: Response, next: NextFunction) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
 // Helmet security defaults configured to allow embedded iframe script usage safely
 app.use(helmet({
   contentSecurityPolicy: false, 
@@ -566,38 +574,61 @@ function initializeMongoSchemas() {
   }));
 }
 
-// Graceful Lazy Connection Attempt
+// Resilient Connection Manager for MongoDB Atlas with Automatic Reconnection
 const MONGODB_URI = process.env.MONGODB_URI;
-if (MONGODB_URI && MONGODB_URI.trim().length > 0) {
-  console.log('Attempting lazy connection to MongoDB Atlas...');
-  mongoose.connect(MONGODB_URI)
-    .then(async () => {
-      console.log('Successfully connected to MongoDB Atlas!');
-      useMongo = true;
-      initializeMongoSchemas();
-      
-      // Seed Mongoose optionally if database collections are empty
-      const projCount = await MongoProject.countDocuments();
-      if (projCount === 0) {
-        console.log('Seeding initial collections into MongoDB database...');
-        await MongoProject.insertMany(defaultData.projects);
-        await MongoSkill.insertMany(defaultData.skills);
-        await MongoEducation.insertMany(defaultData.education);
-        await MongoExperience.insertMany(defaultData.experience);
-        await MongoExtraCurricular.insertMany(defaultData.extracurricular);
-        await MongoCertification.insertMany(defaultData.certifications);
-        await MongoResumeState.create({ uploaded: false });
-        await MongoProfile.create(defaultData.profile);
-        console.log('Seed operations fully complete.');
-      }
-    })
-    .catch((err) => {
-      console.error('Failed to connect to MongoDB Atlas. Seamlessly running on interactive Local Database instead.', err);
-      useMongo = false;
-    });
-} else {
-  console.log('No MONGODB_URI found. Initializing with local JSON file-based database for preview.');
+
+let isConnectingMongo = false;
+async function attemptMongoConnection() {
+  if (!MONGODB_URI || MONGODB_URI.trim().length === 0) {
+    console.log('No MONGODB_URI found. Initializing with local JSON file-based database for preview.');
+    return;
+  }
+  if (isConnectingMongo || mongoose.connection.readyState === 1) return;
+  isConnectingMongo = true;
+
+  try {
+    console.log('Attempting connection to MongoDB Atlas...');
+    await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000 });
+    console.log('Successfully connected to MongoDB Atlas!');
+    useMongo = true;
+    initializeMongoSchemas();
+
+    // Seed Mongoose optionally if database collections are empty
+    const projCount = await MongoProject.countDocuments();
+    if (projCount === 0) {
+      console.log('Seeding initial collections into MongoDB database...');
+      await MongoProject.insertMany(defaultData.projects);
+      await MongoSkill.insertMany(defaultData.skills);
+      await MongoEducation.insertMany(defaultData.education);
+      await MongoExperience.insertMany(defaultData.experience);
+      await MongoExtraCurricular.insertMany(defaultData.extracurricular);
+      await MongoCertification.insertMany(defaultData.certifications);
+      await MongoResumeState.create({ uploaded: false });
+      await MongoProfile.create(defaultData.profile);
+      console.log('Seed operations fully complete.');
+    }
+  } catch (err: any) {
+    console.error('Failed to connect to MongoDB Atlas. Seamlessly running on interactive Local Database instead. Retrying in 10s...', err.message);
+    useMongo = false;
+    setTimeout(attemptMongoConnection, 10000);
+  } finally {
+    isConnectingMongo = false;
+  }
 }
+
+mongoose.connection.on('disconnected', () => {
+  console.warn('MongoDB connection disconnected! Switching to local database and scheduling reconnect...');
+  useMongo = false;
+  setTimeout(attemptMongoConnection, 10000);
+});
+
+mongoose.connection.on('connected', () => {
+  console.log('MongoDB connection active.');
+  useMongo = true;
+  initializeMongoSchemas();
+});
+
+attemptMongoConnection();
 
 // RESTful API Handlers
 

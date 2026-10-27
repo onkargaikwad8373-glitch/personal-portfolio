@@ -14,12 +14,27 @@ export default function Hero({ onScrollToContact, onScrollToProjects, profile }:
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const phrases = [
-    'Full Stack Developer',
-    'React Enthusiast',
-    'Problem Solver',
-    'CS Engineering Grad'
-  ];
+  const phrases = React.useMemo(() => {
+    if (profile?.title) {
+      return [
+        profile.title,
+        'Full Stack Developer',
+        'React Enthusiast',
+        'Problem Solver'
+      ];
+    }
+    return [
+      'Full Stack Developer',
+      'React Enthusiast',
+      'Problem Solver',
+      'CS Engineering Grad'
+    ];
+  }, [profile?.title]);
+
+  useEffect(() => {
+    setPhraseIdx(0);
+    setTypedText('');
+  }, [profile?.title]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -210,7 +225,7 @@ export default function Hero({ onScrollToContact, onScrollToProjects, profile }:
 
                   {profile?.avatarUrl ? (
                     <img 
-                      src={profile.avatarUrl} 
+                      src={`${profile.avatarUrl}${profile.avatarUrl.includes('?') ? '&' : '?'}v=${profile.name ? encodeURIComponent(profile.name) : '1'}`} 
                       alt={name}
                       className="absolute inset-0 w-full h-full object-cover rounded-full z-20"
                     />

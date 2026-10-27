@@ -44,6 +44,7 @@ export default function Skills({ skillsData }: SkillsProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="skills_categories_grid">
           {categories.map((cat, idx) => {
             const filteredSkills = skillsData.filter(s => s.category === cat.id);
+            if (filteredSkills.length === 0) return null;
             
             return (
               <motion.div

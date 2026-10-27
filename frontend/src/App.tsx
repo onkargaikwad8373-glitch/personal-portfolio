@@ -71,17 +71,25 @@ export default function App() {
     }
   };
 
-  // FETCH ALL PORTFOLIO CONTENT FROM BACKEND APIS
+  // FETCH ALL PORTFOLIO CONTENT FROM BACKEND APIS (Cache-Busted for Real-Time Accuracy)
   const fetchAllPortfolioData = async () => {
     try {
+      const ts = Date.now();
+      const noCacheInit: RequestInit = {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
+        }
+      };
       const [projR, skillR, eduR, expR, extraR, certR, profileR] = await Promise.all([
-        fetch('/api/projects'),
-        fetch('/api/skills'),
-        fetch('/api/education'),
-        fetch('/api/experience'),
-        fetch('/api/extracurricular'),
-        fetch('/api/certifications'),
-        fetch('/api/profile')
+        fetch(`/api/projects?_t=${ts}`, noCacheInit),
+        fetch(`/api/skills?_t=${ts}`, noCacheInit),
+        fetch(`/api/education?_t=${ts}`, noCacheInit),
+        fetch(`/api/experience?_t=${ts}`, noCacheInit),
+        fetch(`/api/extracurricular?_t=${ts}`, noCacheInit),
+        fetch(`/api/certifications?_t=${ts}`, noCacheInit),
+        fetch(`/api/profile?_t=${ts}`, noCacheInit)
       ]);
 
       if (projR.ok) setProjects(await projR.json());
