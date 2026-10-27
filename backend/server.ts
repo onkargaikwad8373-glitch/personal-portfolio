@@ -657,19 +657,16 @@ app.post('/api/profile/photo', authenticateAdmin, uploadAvatar.single('avatar'),
 app.post('/api/admin/login', async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  // Standard safe demo check to guarantee workspace developers/reviewers can test right away
-  const defaultEmail = 'admin@portfolio.com';
-  const defaultPass = 'admin123';
+  const adminEmail = process.env.ADMIN_EMAIL || 'onkargaikwad8373@gmail.com';
+  const adminPassword = process.env.ADMIN_PASSWORD;
 
-  // In production, we'd pull these from encrypted parameters or secure stores,
-  // but if email maps and password is right, authenticate
-  if (email === defaultEmail && password === defaultPass) {
-    const token = jwt.sign({ role: 'admin', email }, JWT_SECRET, { expiresIn: '24h' });
-    res.json({ token, user: { email, name: 'Admin Administrator' } });
+  if (adminPassword && email && password && email.trim().toLowerCase() === adminEmail.trim().toLowerCase() && password === adminPassword) {
+    const token = jwt.sign({ role: 'admin', email: adminEmail }, JWT_SECRET, { expiresIn: '24h' });
+    res.json({ token, user: { email: adminEmail, name: 'Onkar Gaikwad' } });
     return;
   }
 
-  res.status(401).json({ error: 'Incorrect credentials code! Use default credentials (admin@portfolio.com / admin123) to review in sandbox.' });
+  res.status(401).json({ error: 'Invalid email or password.' });
 });
 
 // 2. CONTACT DISPATCH & HISTORY
