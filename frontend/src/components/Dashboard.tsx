@@ -3,7 +3,8 @@ import { motion } from 'motion/react';
 import { 
   ShieldAlert, LogOut, LayoutGrid, MessageSquare, Briefcase, 
   Settings, Award, Sparkles, BookOpen, Upload, Trash2, Edit3, 
-  PlusCircle, FileText, Check, AlertTriangle, Eye, ShieldCheck, Terminal, Star
+  PlusCircle, FileText, Check, AlertTriangle, Eye, ShieldCheck, Terminal, Star,
+  Link2, Image as ImageIcon, Github
 } from 'lucide-react';
 import { Project, Skill, Education, Experience, ExtraCurricular, Certification, ContactMessage, VisitorLog, DashboardStats, Profile } from '../types';
 
@@ -103,8 +104,11 @@ export default function Dashboard({
   const [profileSuccess, setProfileSuccess] = useState(false);
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [avatarUrlInput, setAvatarUrlInput] = useState<string>('');
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [avatarSuccess, setAvatarSuccess] = useState(false);
+  const [avatarError, setAvatarError] = useState<string>('');
 
   useEffect(() => {
     if (profile) {
@@ -713,35 +717,187 @@ export default function Dashboard({
     }
   };
 
+  // Client-side canvas image optimizer - compresses high-res photos to high quality ~50-80KB WebP/JPEG
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const maxDim = 600;
+          let w = img.width;
+          let h = img.height;
+          if (w > h) {
+            if (w > maxDim) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            }
+          } else {
+            if (h > maxDim) {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            resolve(e.target?.result as string);
+            return;
+          }
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.88));
+        };
+        img.onerror = () => resolve(e.target?.result as string);
+      };
+      reader.onerror = (err) => reject(err);
+    });
+  };
+
+  const handleAvatarFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarFile(file);
+    setAvatarError('');
+    try {
+      const compressed = await compressImage(file);
+      setAvatarPreview(compressed);
+    } catch (err) {
+      setAvatarPreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleAvatarUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!token || !avatarFile) return;
+    if (!token) return;
+    if (!avatarFile && !avatarPreview) {
+      setAvatarError('Please select an image file first.');
+      return;
+    }
+
     setAvatarUploading(true);
     setAvatarSuccess(false);
-
-    const formData = new FormData();
-    formData.append('avatar', avatarFile);
+    setAvatarError('');
 
     try {
-      const response = await fetch('/api/profile/photo', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body: formData
-      });
+      let response: Response;
+
+      if (avatarPreview && avatarPreview.startsWith('data:image/')) {
+        // Send base64 payload as JSON directly - immune to Render ephemeral disk resets
+        response = await fetch('/api/profile/photo', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` 
+          },
+          body: JSON.stringify({ avatarUrl: avatarPreview })
+        });
+      } else if (avatarFile) {
+        // Fallback to FormData file upload
+        const formData = new FormData();
+        formData.append('avatar', avatarFile);
+        response = await fetch('/api/profile/photo', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          body: formData
+        });
+      } else {
+        return;
+      }
 
       if (response.ok) {
+        const resData = await response.json();
         setAvatarSuccess(true);
         setAvatarFile(null);
-        const resData = await response.json();
+        setAvatarPreview(null);
         setProfileForm(prev => ({ ...prev, avatarUrl: resData.avatarUrl }));
         onRefreshAllData();
         setTimeout(() => setAvatarSuccess(false), 3000);
       } else {
-        const resJson = await response.json();
-        alert(resJson.error || 'Failed to upload avatar.');
+        const isAuthOk = await checkAuthResponse(response);
+        if (isAuthOk) {
+          const resJson = await response.json().catch(() => ({}));
+          setAvatarError(resJson.error || 'Failed to upload photo.');
+        }
       }
     } catch (err: any) {
-      alert(err.message || 'Error occurred.');
+      setAvatarError(err.message || 'Error occurred.');
+    } finally {
+      setAvatarUploading(false);
+    }
+  };
+
+  const handleSaveAvatarUrl = async (urlToSave: string) => {
+    if (!token) return;
+    const cleanUrl = urlToSave.trim();
+    if (!cleanUrl) {
+      setAvatarError('Please enter a valid image URL.');
+      return;
+    }
+
+    setAvatarUploading(true);
+    setAvatarSuccess(false);
+    setAvatarError('');
+
+    try {
+      const response = await fetch('/api/profile/photo', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({ avatarUrl: cleanUrl })
+      });
+
+      if (response.ok) {
+        const resData = await response.json();
+        setAvatarSuccess(true);
+        setAvatarUrlInput('');
+        setAvatarPreview(null);
+        setProfileForm(prev => ({ ...prev, avatarUrl: resData.avatarUrl }));
+        onRefreshAllData();
+        setTimeout(() => setAvatarSuccess(false), 3000);
+      } else {
+        const isAuthOk = await checkAuthResponse(response);
+        if (isAuthOk) {
+          const resJson = await response.json().catch(() => ({}));
+          setAvatarError(resJson.error || 'Failed to set avatar URL.');
+        }
+      }
+    } catch (err: any) {
+      setAvatarError(err.message || 'Error occurred.');
+    } finally {
+      setAvatarUploading(false);
+    }
+  };
+
+  const handleRemoveAvatar = async () => {
+    if (!token) return;
+    if (!confirm('Are you sure you want to remove your profile photo and revert to initials?')) return;
+    setAvatarUploading(true);
+    setAvatarError('');
+    try {
+      const response = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({ avatarUrl: '' })
+      });
+      if (response.ok) {
+        setAvatarSuccess(true);
+        setAvatarFile(null);
+        setAvatarPreview(null);
+        setProfileForm(prev => ({ ...prev, avatarUrl: '' }));
+        onRefreshAllData();
+        setTimeout(() => setAvatarSuccess(false), 3000);
+      }
+    } catch (e: any) {
+      setAvatarError(e.message);
     } finally {
       setAvatarUploading(false);
     }
@@ -2032,42 +2188,127 @@ export default function Dashboard({
                     {/* LEFT PANEL: General Profile and Avatar Upload */}
                     <div className="lg:col-span-4 space-y-6">
                       {/* Profile Photo Card */}
-                      <div className="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
-                        <h4 className="text-sm font-bold text-white font-mono uppercase tracking-wider">Profile Photo</h4>
+                      <div className="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-5">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-bold text-white font-mono uppercase tracking-wider">Profile Photo</h4>
+                          {profileForm.avatarUrl && (
+                            <button
+                              type="button"
+                              onClick={handleRemoveAvatar}
+                              disabled={avatarUploading}
+                              className="text-[10px] text-rose-400 hover:text-rose-300 font-mono transition"
+                            >
+                              Remove Photo
+                            </button>
+                          )}
+                        </div>
+
                         <div className="flex flex-col items-center space-y-4">
-                          <div className="w-32 h-32 rounded-full border-2 border-indigo-500/20 overflow-hidden bg-slate-950 flex items-center justify-center relative">
-                            {profileForm.avatarUrl ? (
-                              <img src={profileForm.avatarUrl} alt="Avatar Preview" className="w-full h-full object-cover" />
+                          <div className="w-32 h-32 rounded-full border-2 border-indigo-500/30 overflow-hidden bg-slate-950 flex items-center justify-center relative shadow-inner">
+                            {avatarPreview ? (
+                              <img src={avatarPreview} alt="New Preview" className="w-full h-full object-cover" />
+                            ) : profileForm.avatarUrl ? (
+                              <img 
+                                src={profileForm.avatarUrl.startsWith('data:') ? profileForm.avatarUrl : `${profileForm.avatarUrl}${profileForm.avatarUrl.includes('?') ? '&' : '?'}v=${Date.now()}`} 
+                                alt="Avatar Preview" 
+                                className="w-full h-full object-cover" 
+                              />
                             ) : (
                               <span className="text-3xl font-extrabold text-slate-600">No Image</span>
                             )}
+                            {avatarPreview && (
+                              <span className="absolute bottom-1 bg-cyan-500 text-black text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+                                Ready
+                              </span>
+                            )}
                           </div>
 
-                          <form onSubmit={handleAvatarUpload} className="w-full space-y-3">
-                            <div className="relative border border-dashed border-slate-800 hover:border-indigo-500/30 rounded-lg p-4 text-center cursor-pointer bg-slate-950/20">
+                          {avatarError && (
+                            <p className="text-[11px] text-rose-400 text-center bg-rose-500/10 border border-rose-500/20 rounded p-1.5 w-full">
+                              {avatarError}
+                            </p>
+                          )}
+
+                          {avatarSuccess && (
+                            <p className="text-[11px] text-emerald-400 text-center bg-emerald-500/10 border border-emerald-500/20 rounded p-1.5 w-full">
+                              Photo saved successfully!
+                            </p>
+                          )}
+
+                          {/* OPTION 1: File Upload with instant canvas optimization */}
+                          <form onSubmit={handleAvatarUpload} className="w-full space-y-2.5">
+                            <label className="text-[10px] font-bold text-slate-400 font-mono uppercase tracking-wider block text-left">
+                              Upload Image File
+                            </label>
+                            <div className="relative border border-dashed border-slate-700 hover:border-cyan-500/50 rounded-lg p-3 text-center cursor-pointer bg-slate-950/40 transition">
                               <input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => e.target.files && setAvatarFile(e.target.files[0])}
+                                onChange={handleAvatarFileSelect}
                                 className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                               />
-                              <p className="text-xs text-slate-400 font-semibold truncate">
-                                {avatarFile ? avatarFile.name : 'Select Image File'}
+                              <p className="text-xs text-slate-300 font-semibold truncate">
+                                {avatarFile ? avatarFile.name : 'Choose from Device'}
                               </p>
+                              <span className="text-[10px] text-slate-500 block mt-0.5">JPEG, PNG, WEBP (auto-optimized)</span>
                             </div>
 
-                            {avatarSuccess && (
-                              <p className="text-[10px] text-emerald-400 text-center">Photo updated successfully!</p>
+                            {avatarPreview && (
+                              <button
+                                type="submit"
+                                disabled={avatarUploading}
+                                className="w-full py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 disabled:opacity-50 text-white text-xs font-bold uppercase transition active:scale-95 cursor-pointer shadow-md shadow-indigo-500/20"
+                              >
+                                {avatarUploading ? 'Saving Photo...' : 'Save Uploaded Photo'}
+                              </button>
                             )}
+                          </form>
+
+                          {/* Divider */}
+                          <div className="w-full flex items-center gap-2 my-1">
+                            <div className="h-px bg-slate-800 flex-1" />
+                            <span className="text-[10px] uppercase font-mono text-slate-500">OR</span>
+                            <div className="h-px bg-slate-800 flex-1" />
+                          </div>
+
+                          {/* OPTION 2: External Image URL or GitHub Profile */}
+                          <div className="w-full space-y-2">
+                            <label className="text-[10px] font-bold text-slate-400 font-mono uppercase tracking-wider block text-left">
+                              External Image URL
+                            </label>
+                            <div className="flex gap-2">
+                              <input
+                                type="url"
+                                placeholder="https://example.com/photo.jpg"
+                                value={avatarUrlInput}
+                                onChange={(e) => setAvatarUrlInput(e.target.value)}
+                                className="flex-1 px-3 py-1.5 rounded-lg bg-slate-955 border border-slate-800 text-white text-xs placeholder-slate-600 focus:outline-none focus:border-cyan-500"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleSaveAvatarUrl(avatarUrlInput)}
+                                disabled={avatarUploading || !avatarUrlInput.trim()}
+                                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-white text-xs font-bold transition"
+                              >
+                                Apply
+                              </button>
+                            </div>
 
                             <button
-                              type="submit"
-                              disabled={avatarUploading || !avatarFile}
-                              className="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-bold uppercase transition active:scale-95 cursor-pointer"
+                              type="button"
+                              onClick={() => {
+                                const ghUrl = profileForm.github?.includes('github.com/')
+                                  ? `https://github.com/${profileForm.github.split('github.com/')[1].replace(/[/].*/, '')}.png`
+                                  : 'https://github.com/onkargaikwad8373-glitch.png';
+                                handleSaveAvatarUrl(ghUrl);
+                              }}
+                              disabled={avatarUploading}
+                              className="w-full py-1.5 px-3 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-950 text-slate-300 hover:text-white text-xs font-medium flex items-center justify-center gap-2 transition"
                             >
-                              {avatarUploading ? 'Uploading...' : 'Upload Photo'}
+                              <Github className="w-3.5 h-3.5 text-cyan-400" />
+                              Use GitHub Avatar
                             </button>
-                          </form>
+                          </div>
                         </div>
                       </div>
 

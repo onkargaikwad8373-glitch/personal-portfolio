@@ -29,7 +29,8 @@ import {
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: '15mb' }));
+app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -89,14 +90,15 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 } // 10MB Limit
 });
 
-// Helper: Multer setup for avatar photo
+// Helper: Multer setup for avatar photo with unique timestamp and 10MB limit
 const avatarStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, UPLOADS_DIR);
   },
   filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname) || '.png';
-    cb(null, 'avatar' + ext);
+    const ext = path.extname(file.originalname).toLowerCase() || '.png';
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e6);
+    cb(null, 'avatar-' + uniqueSuffix + ext);
   }
 });
 
@@ -106,10 +108,10 @@ const uploadAvatar = multer({
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
-      cb(new Error('Only image files are allowed!'));
+      cb(new Error('Only image files (JPEG, PNG, WEBP, GIF, SVG) are allowed!'));
     }
   },
-  limits: { fileSize: 5 * 1024 * 1024 }
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB Limit
 });
 
 // Multer setup for project image uploads
@@ -665,13 +667,36 @@ app.put('/api/profile', authenticateAdmin, async (req: Request, res: Response) =
   }
 });
 
-app.post('/api/profile/photo', authenticateAdmin, uploadAvatar.single('avatar'), async (req: Request, res: Response) => {
-  try {
-    if (!req.file) {
-      res.status(400).json({ error: 'Please upload an image file.' });
+app.post('/api/profile/photo', authenticateAdmin, (req: Request, res: Response, next: NextFunction) => {
+  // If JSON request with avatarUrl, bypass multer
+  if (req.is('application/json')) {
+    return next();
+  }
+  uploadAvatar.single('avatar')(req, res, (err: any) => {
+    if (err) {
+      if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+        res.status(400).json({ error: 'Image file is too large! Maximum allowed size is 10MB.' });
+        return;
+      }
+      res.status(400).json({ error: err.message || 'Image upload failed.' });
       return;
     }
-    const avatarUrl = `/uploads/${req.file.filename}`;
+    next();
+  });
+}, async (req: Request, res: Response) => {
+  try {
+    let avatarUrl = req.body?.avatarUrl;
+
+    if (req.file) {
+      avatarUrl = `/uploads/${req.file.filename}`;
+    }
+
+    if (!avatarUrl || typeof avatarUrl !== 'string' || !avatarUrl.trim()) {
+      res.status(400).json({ error: 'Please provide an image file or a valid image URL.' });
+      return;
+    }
+
+    avatarUrl = avatarUrl.trim();
     let updated: any;
     if (useMongo) {
       updated = await MongoProfile.findOneAndUpdate({}, { avatarUrl }, { new: true, upsert: true });

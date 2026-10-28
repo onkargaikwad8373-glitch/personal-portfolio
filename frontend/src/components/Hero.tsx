@@ -13,6 +13,18 @@ export default function Hero({ onScrollToContact, onScrollToProjects, profile }:
   const [typedText, setTypedText] = useState('');
   const [phraseIdx, setPhraseIdx] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [profile?.avatarUrl]);
+
+  const avatarSrc = React.useMemo(() => {
+    if (!profile?.avatarUrl) return '';
+    if (profile.avatarUrl.startsWith('data:')) return profile.avatarUrl;
+    const separator = profile.avatarUrl.includes('?') ? '&' : '?';
+    return `${profile.avatarUrl}${separator}v=${profile.avatarUrl.slice(-10) || '1'}`;
+  }, [profile?.avatarUrl]);
 
   const phrases = React.useMemo(() => {
     if (profile?.title) {
@@ -223,10 +235,11 @@ export default function Hero({ onScrollToContact, onScrollToProjects, profile }:
                   {/* Glass reflection */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 rounded-full pointer-events-none z-10" />
 
-                  {profile?.avatarUrl ? (
+                  {profile?.avatarUrl && !imgError ? (
                     <img 
-                      src={`${profile.avatarUrl}${profile.avatarUrl.includes('?') ? '&' : '?'}v=${profile.name ? encodeURIComponent(profile.name) : '1'}`} 
+                      src={avatarSrc} 
                       alt={name}
+                      onError={() => setImgError(true)}
                       className="absolute inset-0 w-full h-full object-cover rounded-full z-20"
                     />
                   ) : (
