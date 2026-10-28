@@ -7,6 +7,7 @@ import {
   Link2, Image as ImageIcon, Github, ArrowUp, ArrowDown
 } from 'lucide-react';
 import { Project, Skill, Education, Experience, ExtraCurricular, Certification, ContactMessage, VisitorLog, DashboardStats, Profile } from '../types';
+import SkillIcon from './SkillIcon';
 
 interface DashboardProps {
   onClose: () => void;
@@ -1575,19 +1576,31 @@ export default function Dashboard({
 
                   {/* Add skill fast mini-form */}
                   <form onSubmit={handleSkillSubmit} className="p-5 rounded-xl bg-slate-900 border border-slate-850 flex flex-wrap items-end gap-4 text-left">
-                    <div className="flex-1 min-w-[200px] space-y-1">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase font-mono">Skill Name</label>
-                      <input
-                        type="text"
-                        value={newSkill.name}
-                        onChange={(e) => setNewSkill({ ...newSkill, name: e.target.value })}
-                        className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-700 text-sm"
-                        placeholder="e.g. TypeScript"
-                        required
-                      />
+                    <div className="flex-1 min-w-[220px] space-y-1">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase font-mono">Skill Name</label>
+                        {newSkill.name.trim() && (
+                          <span className="text-[10px] text-cyan-400 font-mono flex items-center gap-1">
+                            Live Icon Match: <SkillIcon name={newSkill.name} />
+                          </span>
+                        )}
+                      </div>
+                      <div className="relative flex items-center">
+                        <div className="absolute left-3 w-5 h-5 flex items-center justify-center pointer-events-none">
+                          <SkillIcon name={newSkill.name} />
+                        </div>
+                        <input
+                          type="text"
+                          value={newSkill.name}
+                          onChange={(e) => setNewSkill({ ...newSkill, name: e.target.value })}
+                          className="w-full pl-10 pr-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-700 text-sm focus:border-cyan-500/50 outline-none transition"
+                          placeholder="e.g. TypeScript, React, Docker..."
+                          required
+                        />
+                      </div>
                     </div>
 
-                    <div className="space-y-1 shrink-0 w-44">
+                    <div className="space-y-1 shrink-0 w-48">
                       <label className="text-[10px] font-bold text-slate-400 uppercase font-mono">Category</label>
                       <select
                         value={newSkill.category}
@@ -1595,11 +1608,13 @@ export default function Dashboard({
                         className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none"
                       >
                         <option value="Programming Languages">Programming Languages</option>
-                        <option value="Frontend">Frontend Code</option>
+                        <option value="Frontend">Frontend UI & Web</option>
                         <option value="Backend">Backend Orchestration</option>
-                        <option value="Database">Database Structures</option>
-                        <option value="Tools & Platforms">Tools & Platforms</option>
-                        <option value="Currently Learning">Exploring</option>
+                        <option value="Database">Database & Caching</option>
+                        <option value="Tools & Platforms">Tools & Ecosystems</option>
+                        <option value="Computer Science Core">CS Fundamentals & Core</option>
+                        <option value="Soft Skills">Professional & Soft Skills</option>
+                        <option value="Currently Learning">Currently Exploring</option>
                       </select>
                     </div>
 
@@ -1629,11 +1644,16 @@ export default function Dashboard({
                   <div className="space-y-4" id="manage_skills_list">
                     {allSkills.map((sk) => (
                       <div key={sk._id} className="p-3 px-4.5 rounded-xl bg-slate-900 border border-slate-850 flex items-center justify-between text-xs text-left text-slate-350">
-                        <div>
-                          <span className="font-bold text-white text-sm">{sk.name}</span>
-                          <span className="ml-3 px-2 py-0.5 rounded bg-slate-950 text-slate-500">{sk.category}</span>
+                        <div className="flex items-center space-x-3 min-w-0">
+                          <div className="h-7 min-w-[28px] px-1.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
+                            <SkillIcon name={sk.name} icon={sk.icon} />
+                          </div>
+                          <div className="truncate">
+                            <span className="font-bold text-white text-sm">{sk.name}</span>
+                            <span className="ml-3 px-2 py-0.5 rounded bg-slate-950 text-slate-500 text-xs">{sk.category}</span>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-4 shrink-0 ml-3">
                           <span className="font-mono text-cyan-400 text-sm font-semibold">{sk.proficiency}%</span>
                           <button
                             onClick={() => handleDeleteSkill(sk._id)}

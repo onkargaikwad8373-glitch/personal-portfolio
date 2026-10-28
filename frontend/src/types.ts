@@ -18,8 +18,9 @@ export interface Project extends BaseEntity {
 
 export interface Skill extends BaseEntity {
   name: string;
-  category: 'Programming Languages' | 'Frontend' | 'Backend' | 'Database' | 'Tools & Platforms' | 'Currently Learning';
+  category: 'Programming Languages' | 'Frontend' | 'Backend' | 'Database' | 'Tools & Platforms' | 'Currently Learning' | 'Web Development' | 'Databases' | 'Computer Science Core' | 'Soft Skills' | (string & {});
   proficiency: number; // 0 to 100
+  icon?: string;
 }
 
 export interface Education extends BaseEntity {
