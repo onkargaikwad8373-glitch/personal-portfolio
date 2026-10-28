@@ -4,7 +4,7 @@ import {
   ShieldAlert, LogOut, LayoutGrid, MessageSquare, Briefcase, 
   Settings, Award, Sparkles, BookOpen, Upload, Trash2, Edit3, 
   PlusCircle, FileText, Check, AlertTriangle, Eye, ShieldCheck, Terminal, Star,
-  Link2, Image as ImageIcon, Github
+  Link2, Image as ImageIcon, Github, ArrowUp, ArrowDown
 } from 'lucide-react';
 import { Project, Skill, Education, Experience, ExtraCurricular, Certification, ContactMessage, VisitorLog, DashboardStats, Profile } from '../types';
 
@@ -362,6 +362,49 @@ export default function Dashboard({
       }
     } catch (e: any) {
       alert(`Network error highlighting project: ${e.message}`);
+    }
+  };
+
+  const handleMoveProjectOrder = async (projId: string, direction: 'up' | 'down') => {
+    if (!token) return;
+    const sorted = [...allProjects].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+    const currIndex = sorted.findIndex(p => p._id === projId);
+    if (currIndex === -1) return;
+    const targetIndex = direction === 'up' ? currIndex - 1 : currIndex + 1;
+    if (targetIndex < 0 || targetIndex >= sorted.length) return;
+
+    const currentItem = sorted[currIndex];
+    const targetItem = sorted[targetIndex];
+
+    const currentOrder = currentItem.order ?? (currIndex + 1);
+    const targetOrder = targetItem.order ?? (targetIndex + 1);
+
+    const newCurrentOrder = currentOrder === targetOrder 
+      ? (direction === 'up' ? Math.max(1, targetOrder - 1) : targetOrder + 1)
+      : targetOrder;
+    const newTargetOrder = currentOrder;
+
+    try {
+      const resp = await fetch('/api/projects-reorder', {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({
+          items: [
+            { id: currentItem._id, order: newCurrentOrder },
+            { id: targetItem._id, order: newTargetOrder }
+          ]
+        })
+      });
+      if (resp.ok) {
+        onRefreshAllData();
+      } else {
+        await checkAuthResponse(resp);
+      }
+    } catch (e) {
+      console.error('Failed to swap project order', e);
     }
   };
 
@@ -1260,7 +1303,17 @@ export default function Dashboard({
                     {projectEditorAction === 'idle' && (
                       <button
                         onClick={() => {
-                          setSelectedProject({ title: '', description: '', techStack: [], features: [], githubLink: '', liveDemoLink: '', projectImage: '', featured: false });
+                          setSelectedProject({ 
+                            title: '', 
+                            description: '', 
+                            techStack: [], 
+                            features: [], 
+                            githubLink: '', 
+                            liveDemoLink: '', 
+                            projectImage: '', 
+                            featured: false,
+                            order: allProjects.length + 1
+                          });
                           setProjectEditorAction('create');
                         }}
                         className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-indigo-500 hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 active:scale-95 cursor-pointer"
@@ -1386,15 +1439,36 @@ export default function Dashboard({
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-3 py-2">
-                        <input
-                          type="checkbox"
-                          id="form_proj_featured"
-                          checked={selectedProject.featured || false}
-                          onChange={(e) => setSelectedProject({ ...selectedProject, featured: e.target.checked })}
-                          className="w-4 h-4 text-cyan-500 rounded bg-slate-950 border-slate-800 focus:outline-none focus:ring-0 focus:ring-offset-0"
-                        />
-                        <label htmlFor="form_proj_featured" className="text-xs text-slate-300 font-semibold uppercase tracking-wider">Highlight as Flagship Featured project</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center py-2">
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-slate-400 uppercase font-mono tracking-wide flex items-center justify-between">
+                            <span>Display Position # (Sequence) *</span>
+                            <span className="text-[9px] text-cyan-400 font-normal lowercase">1 = top priority, 2 = second...</span>
+                          </label>
+                          <input
+                            type="number"
+                            min={1}
+                            max={999}
+                            value={selectedProject.order !== undefined ? selectedProject.order : (allProjects.length + 1)}
+                            onChange={(e) => setSelectedProject({ ...selectedProject, order: parseInt(e.target.value, 10) || 1 })}
+                            className="w-full px-4 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm"
+                            placeholder="e.g. 1"
+                            required
+                          />
+                        </div>
+
+                        <div className="flex items-center space-x-3 pt-4 sm:pt-4">
+                          <input
+                            type="checkbox"
+                            id="form_proj_featured"
+                            checked={selectedProject.featured || false}
+                            onChange={(e) => setSelectedProject({ ...selectedProject, featured: e.target.checked })}
+                            className="w-4 h-4 text-cyan-500 rounded bg-slate-950 border-slate-800 focus:outline-none focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                          />
+                          <label htmlFor="form_proj_featured" className="text-xs text-slate-300 font-semibold uppercase tracking-wider cursor-pointer">
+                            Highlight as Flagship Featured project
+                          </label>
+                        </div>
                       </div>
 
                       <div className="pt-2 flex gap-4">
@@ -1415,13 +1489,47 @@ export default function Dashboard({
                       </div>
                     </form>
                   ) : (
-                    /* LIST CURRENT PROJECTS WITH EDITOR TRIGGERS */
+                    /* LIST CURRENT PROJECTS WITH SEQUENCE BADGES AND REORDER BUTTONS */
                     <div className="grid grid-cols-1 gap-4" id="manage_projects_list">
-                      {allProjects.map((proj) => (
+                      {[...allProjects].sort((a, b) => (a.order ?? 999) - (b.order ?? 999)).map((proj, idx, arr) => (
                         <div key={proj._id} className="p-4 rounded-xl bg-slate-900 border border-slate-850 flex items-center justify-between text-left">
-                          <div>
-                            <p className="font-display font-extrabold text-white">{proj.title}</p>
-                            <p className="text-xs text-slate-500 truncate max-w-lg mt-1 font-sans">{proj.description}</p>
+                          <div className="flex items-center space-x-3.5 min-w-0">
+                            {/* Sequence rank badge & up/down controls */}
+                            <div className="flex flex-col items-center justify-center shrink-0">
+                              <span className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-mono text-xs font-bold flex items-center justify-center">
+                                #{proj.order ?? (idx + 1)}
+                              </span>
+                              <div className="flex items-center gap-0.5 mt-1">
+                                <button
+                                  type="button"
+                                  disabled={idx === 0}
+                                  onClick={() => handleMoveProjectOrder(proj._id, 'up')}
+                                  className="p-1 text-slate-500 hover:text-cyan-400 disabled:opacity-20 disabled:hover:text-slate-500 transition cursor-pointer"
+                                  title="Move Up in Sequence"
+                                >
+                                  <ArrowUp className="w-3 h-3" />
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={idx === arr.length - 1}
+                                  onClick={() => handleMoveProjectOrder(proj._id, 'down')}
+                                  className="p-1 text-slate-500 hover:text-cyan-400 disabled:opacity-20 disabled:hover:text-slate-500 transition cursor-pointer"
+                                  title="Move Down in Sequence"
+                                >
+                                  <ArrowDown className="w-3 h-3" />
+                                </button>
+                              </div>
+                            </div>
+
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className="font-display font-extrabold text-white truncate">{proj.title}</p>
+                                <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20 shrink-0">
+                                  Position #{proj.order ?? (idx + 1)}
+                                </span>
+                              </div>
+                              <p className="text-xs text-slate-500 truncate max-w-lg mt-0.5 font-sans">{proj.description}</p>
+                            </div>
                           </div>
                           
                           <div className="flex space-x-3.5 ml-4 shrink-0">

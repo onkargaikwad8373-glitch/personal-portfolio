@@ -13,6 +13,7 @@ export interface Project extends BaseEntity {
   liveDemoLink: string;
   projectImage: string;
   featured: boolean;
+  order?: number;
 }
 
 export interface Skill extends BaseEntity {

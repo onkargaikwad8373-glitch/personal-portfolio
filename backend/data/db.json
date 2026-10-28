@@ -21,7 +21,8 @@
       "githubLink": "https://github.com/onkargaikwad/ai-food-safety-intelligence",
       "liveDemoLink": "https://ai-food-safety.demo",
       "projectImage": "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&auto=format&fit=crop&q=60",
-      "featured": false
+      "featured": false,
+      "order": 2
     },
     {
       "title": "ReserveKit – Restaurant Queue & Table Management System",
@@ -47,6 +48,7 @@
       "liveDemoLink": "http://q-reserve-frontend.vercel.app",
       "projectImage": "https://iad.microlink.io/qmwmq_TH8vIYoK5kUBszc0X7n6I20y4yztaN6lF4ajsUYSJ34zQ8CjXsYR4-pg0axjDI1eTEKJ7gyIrrNQI0Mg.png",
       "featured": false,
+      "order": 1,
       "_id": "pro-extwx7a33"
     },
     {
@@ -73,6 +75,7 @@
       "liveDemoLink": "http://task-manager-one-azure-57.vercel.app",
       "projectImage": "https://iad.microlink.io/v3DwAIDhBcseT5m5j-uYArxbAsHTBBUa6b4lKbT24z8b-PWFpkaEFPPUNrKPGE_K-KuGyLFZlOFd7Qep7vylTg.png",
       "featured": true,
+      "order": 3,
       "_id": "pro-23hh8thi8"
     },
     {
@@ -94,6 +97,7 @@
       "liveDemoLink": "http://netflix-clone-eta-seven.vercel.app",
       "projectImage": "https://iad.microlink.io/FmCVher5HbxH3GZyZDsNLfE-kaTeWQNDW_-aZVJDb3z8EiYo6vxQs6GqIaqqVYgX6eyt9SODiFD1sq54efbshQ.png",
       "featured": false,
+      "order": 4,
       "_id": "pro-i58wbgyoh"
     }
   ],

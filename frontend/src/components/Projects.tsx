@@ -10,9 +10,14 @@ interface ProjectsProps {
 export default function Projects({ projectsData }: ProjectsProps) {
   const [filter, setFilter] = useState<'all' | 'featured' | 'fullstack'>('all');
 
-  const firstFeatured = projectsData.find(p => p.featured);
+  // Sort projects strictly by sequence order (1, 2, 3...)
+  const sortedProjects = React.useMemo(() => {
+    return [...projectsData].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+  }, [projectsData]);
 
-  const filtered = projectsData.filter((proj) => {
+  const firstFeatured = sortedProjects.find(p => p.featured);
+
+  const filtered = sortedProjects.filter((proj) => {
     if (filter === 'all') {
       // Exclude the flagship featured project from the main grid because it is highlighted in the banner above
       return !firstFeatured || proj._id !== firstFeatured._id;

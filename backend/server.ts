@@ -190,7 +190,8 @@ const defaultData = {
       githubLink: 'https://github.com/onkargaikwad/ai-food-safety-intelligence',
       liveDemoLink: 'https://ai-food-safety.demo',
       projectImage: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&auto=format&fit=crop&q=60',
-      featured: true
+      featured: true,
+      order: 1
     },
     {
       _id: 'proj-2',
@@ -212,7 +213,8 @@ const defaultData = {
       githubLink: 'https://github.com/onkargaikwad/forum-web-app',
       liveDemoLink: 'https://onkar-forum.demo',
       projectImage: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=60',
-      featured: true
+      featured: true,
+      order: 2
     }
   ],
   skills: [
@@ -481,7 +483,8 @@ function initializeMongoSchemas() {
     githubLink: String,
     liveDemoLink: String,
     projectImage: String,
-    featured: { type: Boolean, default: false }
+    featured: { type: Boolean, default: false },
+    order: { type: Number, default: 999 }
   }, schOptions));
 
   MongoSkill = mongoose.model('Skill', new mongoose.Schema({
@@ -826,9 +829,9 @@ app.get('/api/projects', async (req: Request, res: Response) => {
   try {
     let list: any[];
     if (useMongo) {
-      list = await MongoProject.find();
+      list = await MongoProject.find().sort({ order: 1, createdAt: -1 });
     } else {
-      list = localDB.getProjects();
+      list = [...localDB.getProjects()].sort((a: any, b: any) => (a.order ?? 999) - (b.order ?? 999));
     }
     res.json(list);
   } catch (e: any) {
@@ -860,7 +863,8 @@ app.get('/api/projects/:id', async (req: Request, res: Response) => {
 
 app.post('/api/projects', authenticateAdmin, async (req: Request, res: Response) => {
   try {
-    const { title, description, techStack, features, githubLink, liveDemoLink, projectImage, featured } = req.body;
+    const { title, description, techStack, features, githubLink, liveDemoLink, projectImage, featured, order } = req.body;
+    const parsedOrder = (order !== undefined && order !== null && !isNaN(Number(order))) ? Number(order) : 999;
     let saved: any;
     if (useMongo) {
       saved = await MongoProject.create({
@@ -871,7 +875,8 @@ app.post('/api/projects', authenticateAdmin, async (req: Request, res: Response)
         githubLink: githubLink || '',
         liveDemoLink: liveDemoLink || '',
         projectImage: projectImage || '',
-        featured: !!featured
+        featured: !!featured,
+        order: parsedOrder
       });
     } else {
       saved = localDB.addEntity<Project>('projects', {
@@ -882,7 +887,8 @@ app.post('/api/projects', authenticateAdmin, async (req: Request, res: Response)
         githubLink: githubLink || '',
         liveDemoLink: liveDemoLink || '',
         projectImage: projectImage || '',
-        featured: !!featured
+        featured: !!featured,
+        order: parsedOrder
       });
     }
     res.status(201).json(saved);
@@ -891,10 +897,33 @@ app.post('/api/projects', authenticateAdmin, async (req: Request, res: Response)
   }
 });
 
+app.put('/api/projects-reorder', authenticateAdmin, async (req: Request, res: Response) => {
+  try {
+    const { items } = req.body; // Array of { id: string, order: number }
+    if (Array.isArray(items)) {
+      for (const item of items) {
+        if (item.id && typeof item.order === 'number') {
+          if (useMongo) {
+            await MongoProject.findByIdAndUpdate(item.id, { order: item.order });
+          } else {
+            localDB.updateEntity<Project>('projects', item.id, { order: item.order });
+          }
+        }
+      }
+    }
+    res.json({ success: true, message: 'Projects reordered successfully.' });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.put('/api/projects/:id', authenticateAdmin, async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const updates = req.body;
+    const updates = { ...req.body };
+    if (updates.order !== undefined && updates.order !== null) {
+      updates.order = Number(updates.order);
+    }
     let updated: any;
     if (useMongo) {
       updated = await MongoProject.findByIdAndUpdate(id, updates, { new: true });
